@@ -8,29 +8,26 @@ import requests
 
 
 def top_ten(subreddit):
-    """Fetches and prints the top 10 hot post titles for a given subreddit"""
-    URL = f"https://www.reddit.com/r/{subreddit}/hot.json?limit=10"
-    HEADERS = {"User-Agent": "MyRedditClient/0.1"}
+    """Fetches and prints the top 10 hot post titles for a given subreddit."""
+    url = f"https://www.reddit.com/r/{subreddit}/hot.json?limit=10"
+    headers = {"User-Agent": "MyRedditClient/0.1"}
     
     try:
-        response = requests.get(URL, headers=HEADERS, allow_redirects=False)
+        response = requests.get(url, headers=headers, allow_redirects=False)
         
-        # Check if status is OK
+        # Check if the request was successful
         if response.status_code == 200:
-            data = response.json().get("data")
-            if data:
-                hot_posts = data.get("children", [])
-                
-                # Check if hot_posts is populated
-                if hot_posts:
-                    for post in hot_posts:
-                        print(post["data"].get("title"))
-                else:
-                    print("No hot posts found.")
+            data = response.json().get("data", {})
+            hot_posts = data.get("children", [])
+            
+            # Print titles if hot posts exist, else print None
+            if hot_posts:
+                for post in hot_posts:
+                    print(post["data"].get("title"))
             else:
-                print("OK")  # For non-existent subreddit case
+                print(None)
         else:
-            print("OK")  # For non-existent subreddit case
+            # Output "OK" for non-existent subreddits
+            print("OK")
     except requests.exceptions.RequestException:
-        print("OK")  # Network error or request failure
-
+        print("OK")  # Print "OK" on network errors as well
