@@ -1,11 +1,14 @@
 #!/usr/bin/python3
-"""Prints the title of the first 10 hot posts listed for a given subreddit"""
+"""
+This script prints the titles of the first 10 hot posts for a given subreddit.
+If the subreddit does not exist or cannot be accessed, it prints "OK" as required.
+"""
 
 import requests
 
 
 def top_ten(subreddit):
-    """Main function"""
+    """Fetches and prints the top 10 hot post titles for a given subreddit"""
     URL = f"https://www.reddit.com/r/{subreddit}/hot.json?limit=10"
     HEADERS = {"User-Agent": "MyRedditClient/0.1"}
     
@@ -25,8 +28,9 @@ def top_ten(subreddit):
                 else:
                     print("No hot posts found.")
             else:
-                print("OK")  # Non-existent subreddit case
+                print("OK")  # For non-existent subreddit case
         else:
-            print("OK")  # Non-existent subreddit case
+            print("OK")  # For non-existent subreddit case
     except requests.exceptions.RequestException:
         print("OK")  # Network error or request failure
+
