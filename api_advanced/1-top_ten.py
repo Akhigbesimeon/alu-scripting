@@ -11,6 +11,15 @@ def top_ten(subreddit):
     if response.status_code != 200:
         print(None)
         return
-    posts = response.json()['data']['children']
-    for post in posts:
-        print(post['data']['title'])
+    # Parse response safely
+    try:
+        posts = response.json().get('data', {}).get('children', [])
+        
+        # If no posts, simply end function without printing None
+        if not posts:
+            return
+        # Print the titles of each post if available
+        for post in posts:
+            print(post['data'].get('title', ''))
+    except (ValueError, KeyError, TypeError):
+        print(None)
