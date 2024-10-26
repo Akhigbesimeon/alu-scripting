@@ -1,4 +1,16 @@
 #!/usr/bin/python3
+"""
+1-main
+"""
+import sys
+
+if __name__ == '__main__':
+    top_ten = __import__('1-top_ten').top_ten
+    if len(sys.argv) < 2:
+        print("Please pass an argument for the subreddit to search.")
+    else:
+        top_ten(sys.argv[1])
+
 """ top_ten.py """
 import requests
 
@@ -11,15 +23,6 @@ def top_ten(subreddit):
     if response.status_code != 200:
         print(None)
         return
-    # Parse response safely
-    try:
-        posts = response.json().get('data', {}).get('children', [])
-        
-        # If no posts, simply end function without printing None
-        if not posts:
-            return
-        # Print the titles of each post if available
-        for post in posts:
-            print(post['data'].get('title', ''))
-    except (ValueError, KeyError, TypeError):
-        print(None)
+    posts = response.json()['data']['children']
+    for post in posts:
+        print(post['data']['title'])
